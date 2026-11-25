@@ -1,0 +1,18 @@
+@"
+# ANPR-X
+Intelligent Automated Number Plate Recognition System
+
+## Technologies
+- Python
+- OpenCV
+- YOLO
+- EasyOCR
+- FastAPI
+- React
+- Vite
+
+## Project Structure
+- backend: Detection, image processing and OCR
+- frontend: Web dashboard
+- documentation: Project documentation
+"@ | Set-Content README.md
