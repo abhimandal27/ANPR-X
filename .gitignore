@@ -7,3 +7,5 @@ dist/
 .env
 .vscode/
 "@ | Set-Content .gitignore
+backend/weights/*.pt
+backend/weights/*.onnx
