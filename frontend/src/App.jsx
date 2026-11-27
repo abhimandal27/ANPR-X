@@ -1,122 +1,125 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Sidebar from "./components/Sidebar";
+import Topbar from "./components/Topbar";
+import Dashboard from "./pages/Dashboard";
+
+import {
+  ScanLine,
+  CarFront,
+  Receipt,
+  History
+} from "lucide-react";
+
+import "./App.css";
+
+const pageDetails = {
+  dashboard: {
+    title: "Dashboard",
+    subtitle: "Welcome to your vehicle intelligence control centre."
+  },
+  scanner: {
+    title: "ANPR Scanner",
+    subtitle: "Detect and recognize vehicle registration plates."
+  },
+  vehicles: {
+    title: "Vehicle Management",
+    subtitle: "Explore registered vehicle information."
+  },
+  challans: {
+    title: "Challan Records",
+    subtitle: "Monitor traffic violations and challan records."
+  },
+  history: {
+    title: "Detection History",
+    subtitle: "Review previously detected vehicles."
+  }
+};
+
+function PlaceholderPage({ page }) {
+  const pageConfig = {
+    scanner: {
+      icon: ScanLine,
+      heading: "ANPR Scanner",
+      description: "Your intelligent number plate scanning workspace is coming next."
+    },
+    vehicles: {
+      icon: CarFront,
+      heading: "Vehicle Management",
+      description: "Vehicle profiles and registration records will appear here."
+    },
+    challans: {
+      icon: Receipt,
+      heading: "Challan Management",
+      description: "Traffic violation records and challan history will appear here."
+    },
+    history: {
+      icon: History,
+      heading: "Detection History",
+      description: "Your previous ANPR detection records will appear here."
+    }
+  };
+
+  const config = pageConfig[page];
+  const Icon = config.icon;
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <motion.div
+      className="placeholder-page"
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div className="placeholder-icon">
+        <Icon size={36} />
+      </div>
 
-      <div className="ticks"></div>
+      <h2>{config.heading}</h2>
+      <p>{config.description}</p>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <span className="coming-soon">MODULE UNDER DEVELOPMENT</span>
+    </motion.div>
+  );
 }
 
-export default App
+function App() {
+  const [activePage, setActivePage] = useState("dashboard");
+
+  const currentPage = pageDetails[activePage];
+
+  return (
+    <div className="app-layout">
+      <Sidebar
+        activePage={activePage}
+        setActivePage={setActivePage}
+      />
+
+      <main className="main-content">
+        <Topbar
+          title={currentPage.title}
+          subtitle={currentPage.subtitle}
+        />
+
+        <div className="page-content">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activePage}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              {activePage === "dashboard" ? (
+                <Dashboard />
+              ) : (
+                <PlaceholderPage page={activePage} />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default App;
